@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conference Finder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Conference Finder</h1>
+      <p class="sub">Architecture, systems, PL, verification &amp; embedded deadlines · deadlines are AoE (UTC−12) unless noted · today: <span id="today"></span></p>
+      <p class="sub" id="syncLine"></p>
+    </div>
+    <button id="checkUpdates" class="btn" title="Download the latest deadlines from the community-maintained ccf-deadlines dataset">Check for updates</button>
+  </header>
+
+  <section class="controls">
+    <input id="search" type="search" placeholder="Search (e.g. ASPLOS, storage, OSDI)…" autocomplete="off">
+    <div id="areaChips" class="chips"></div>
+    <label class="toggle"><input type="checkbox" id="showPast"> Show closed deadlines</label>
+    <label class="toggle"><input type="checkbox" id="onlyStarred"> Only ★ starred</label>
+    <button id="exportIcs" class="btn ghost" title="Download deadlines of the visible conferences as a calendar file">Export .ics</button>
+  </section>
+
+  <div id="syncReport"></div>
+  <main id="timeline"></main>
+
+  <footer class="foot">
+    Dates marked <span class="badge est">estimated</span> are projected from the previous year and must be checked against the official CFP.
+    Edit <code>data.js</code> to add or correct conferences.
+  </footer>
+
+  <div id="tooltip" class="tooltip" hidden></div>
+
+  <script src="data.js"></script>
+  <script src="data-ccf.js"></script>
+  <script src="updater.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

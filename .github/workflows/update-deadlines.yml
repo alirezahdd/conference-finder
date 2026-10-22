@@ -1,0 +1,31 @@
+name: Update deadlines
+
+on:
+  schedule:
+    - cron: "17 5 * * 1" # Mondays 05:17 UTC
+  workflow_dispatch: # "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save js-yaml@4.1.0
+      - run: node scripts/update-ccf.mjs
+      - name: Commit snapshot if it changed
+        run: |
+          if git diff --quiet -- data-ccf.js; then
+            echo "No changes."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+            git add data-ccf.js
+            git commit -m "Update ccf-deadlines snapshot"
+            git push
+          fi
