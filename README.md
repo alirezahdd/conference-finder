@@ -37,7 +37,7 @@ These conferences are not in ccf-deadlines, so neither the button nor the weekly
 
 | Area | Conferences |
 |---|---|
-| Architecture & hardware | CC, ISLPED |
+| Architecture & hardware | CC, ISLPED, VLSI-SoC, MEMOCODE, IOLTS, DFT, DSD, DDECS |
 | Programming languages & logic | ITP, CPP |
 | Verification | SPIN |
 | Optimisation | CPAIOR |

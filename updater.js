@@ -134,7 +134,7 @@
       const zone = (time, off) => (off == null ? "AoE" : `${time || "23:59"} UTC${off >= 0 ? "+" : ""}${off}`);
       const sameDay = field === "deadline" && c[field] === k.date;
       // ccf-deadlines uses AoE as its default when the zone is unknown: a specific time in data.js wins.
-      if (sameDay && k.utcOffset == null && c.utcOffset != null) return;
+      if (c[field] === k.date && k.utcOffset == null && c.utcOffset != null) return;
       const what = sameDay ? "deadline time" : field;
       const from = sameDay ? zone(c.time, c.utcOffset) : c[field];
       const to = sameDay ? zone(k.time, k.utcOffset) : k.date;
