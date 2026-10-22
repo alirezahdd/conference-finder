@@ -8,7 +8,7 @@
   const SOURCE_PAGE = "https://ccfddl.com/";
   const YAML_LIB = "https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js";
   // Our conference name -> ccf-deadlines title, where they differ.
-  const TITLES = { ATC: "SIGOPS ATC", CGO: "IEEE/ACM CGO", ESOP: "ETAPS", TACAS: "ETAPS" };
+  const TITLES = { ATC: "SIGOPS ATC", CGO: "IEEE/ACM CGO", ESOP: "ETAPS", TACAS: "ETAPS", "USENIX Sec": "USENIX Security" };
   const MATCH_DAYS = 45; // a ccf cycle and one of ours are the same cycle if their deadlines are this close
 
   const DAY = 86400000;
