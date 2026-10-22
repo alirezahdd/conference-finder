@@ -129,11 +129,17 @@
       const ours = instant(c[field], c.time, c.utcOffset);
       const theirs = instant(k.date, k.time, k.utcOffset);
       if (Math.abs(theirs - ours) < SAME_INSTANT_MS) return;
+      // Same day but another time zone: report the times, not two identical dates.
+      const zone = (time, off) => (off == null ? "AoE" : `${time || "23:59"} UTC${off >= 0 ? "+" : ""}${off}`);
+      const sameDay = field === "deadline" && c[field] === k.date;
+      const what = sameDay ? "deadline time" : field;
+      const from = sameDay ? zone(c.time, c.utcOffset) : c[field];
+      const to = sameDay ? zone(k.time, k.utcOffset) : k.date;
       if (c.status === "confirmed" && theirs < ours) {
-        kept.push({ id: c.id, label: label(c), field, ours: c[field], theirs: k.date });
+        kept.push({ id: c.id, label: label(c), field: what, ours: from, theirs: to });
         return;
       }
-      apply(c, field, c[field], k.date + (theirs > ours && c.status === "confirmed" ? " (extended)" : ""));
+      apply(c, what, from, to + (theirs > ours && c.status === "confirmed" ? " (extended)" : ""));
       c[field] = k.date;
       if (field === "deadline") {
         if (k.utcOffset == null) { delete c.time; delete c.utcOffset; } else { c.time = k.time; c.utcOffset = k.utcOffset; }

@@ -345,7 +345,7 @@
           ...changes.map((c) => li(`<b>${esc(c.label)}</b> ${esc(c.field)}: ${nice(c.from)} → ${nice(c.to)}`)),
         ].join("")}</ul>` : ""}
         ${kept.length ? `<details><summary>${plural(kept.length, "difference")} kept: data.js has these from the official CFP</summary><ul>${
-          kept.map((k) => li(`<b>${esc(k.label)}</b> ${esc(k.field)}: data.js ${fmt(k.ours)} · ccf-deadlines ${fmt(k.theirs)}`)).join("")}</ul></details>` : ""}
+          kept.map((k) => li(`<b>${esc(k.label)}</b> ${esc(k.field)}: data.js ${nice(k.ours)} · ccf-deadlines ${nice(k.theirs)}`)).join("")}</ul></details>` : ""}
         ${missing.length ? `<p class="hint">Not in ccf-deadlines, so not checked: ${esc(missing.join(", "))}.</p>` : ""}
         ${sync ? `<button class="linkish" data-syncreset>Undo: use data.js only</button>` : ""}
       </div>`;
