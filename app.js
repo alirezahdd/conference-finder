@@ -104,6 +104,7 @@
     onlyStarred: false,
     stars: new Set(store.get("cf-stars", [])),
     tlPick: new Set(store.get("cf-tlpick", [])), // conference names picked for the timeline; empty = use filters
+    tlOpen: store.get("cf-tlopen", false), // conference picker expanded
     planId: savedPlan.id || null, // cycle you submitted to; null = no rejection scenario
     planMode: savedPlan.mode === "early" ? "early" : "final", // decide on the final notification or the early-reject notice
   };
@@ -198,23 +199,31 @@
   function timelinePicker() {
     const names = [...new Set(ALL.map((c) => c.name))].sort((a, b) => a.localeCompare(b));
     const picked = state.tlPick.size;
+    const open = state.tlOpen;
+    // Collapsed, the header says what is shown; expanded, it explains how the selection works.
+    const pickedList = [...state.tlPick].sort((a, b) => a.localeCompare(b));
+    const summary = picked
+      ? `${picked} selected: ${esc(pickedList.slice(0, 6).join(", "))}${picked > 6 ? ", …" : ""}`
+      : "All conferences matching the filters above.";
+    const hint = picked
+      ? `${picked} selected. The area, search and starred filters are ignored while a selection is active.`
+      : "None selected, so the filters above decide. Click names to choose exactly which to show.";
     return `
-      <div class="tl-picker">
+      <div class="tl-picker ${open ? "open" : ""}">
         <div class="tl-picker-head">
-          <b>Conferences on the timeline</b>
-          <span class="hint">${picked
-            ? `${picked} selected. The area, search and starred filters are ignored while a selection is active.`
-            : "None selected, so the filters above decide. Click names to choose exactly which to show."}</span>
+          <button class="tl-toggle" data-tltoggle aria-expanded="${open}"><span class="caret"></span><b>Conferences on the timeline</b></button>
+          <span class="hint">${open ? hint : summary}</span>
           <span class="tl-picker-actions">
-            <button class="linkish" data-tlaction="matching" title="Add every conference that matches the current filters">+ add matching filters</button>
-            <button class="linkish" data-tlaction="starred">+ add starred</button>
+            ${open ? `<button class="linkish" data-tlaction="matching" title="Add every conference that matches the current filters">+ add matching filters</button>
+            <button class="linkish" data-tlaction="starred">+ add starred</button>` : ""}
             ${picked ? `<button class="linkish" data-tlaction="clear">clear selection</button>` : ""}
+            ${open ? "" : `<button class="linkish" data-tltoggle>choose…</button>`}
           </span>
         </div>
-        <div class="chips">${names.map((n) => {
+        ${open ? `<div class="chips">${names.map((n) => {
           const fullName = ALL.find((c) => c.name === n).fullName || "";
           return `<button class="chip ${state.tlPick.has(n) ? "on" : ""}" data-tlpick="${esc(n)}" title="${esc(fullName)}">${esc(n)}</button>`;
-        }).join("")}</div>
+        }).join("")}</div>` : ""}
       </div>`;
   }
 
@@ -450,6 +459,12 @@
         const id = star.dataset.star;
         state.stars.has(id) ? state.stars.delete(id) : state.stars.add(id);
         store.set("cf-stars", [...state.stars]);
+        render();
+        return;
+      }
+      if (e.target.closest("[data-tltoggle]")) {
+        state.tlOpen = !state.tlOpen;
+        store.set("cf-tlopen", state.tlOpen);
         render();
         return;
       }

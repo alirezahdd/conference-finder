@@ -105,6 +105,13 @@ main { padding: 18px 24px 8px; }
 }
 .tl-picker-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 13px; }
 .tl-picker-head .hint { color: var(--muted); font-size: 12.5px; }
+.tl-toggle { display: inline-flex; align-items: baseline; gap: 6px; background: none; border: none; padding: 0; color: var(--ink); font: inherit; cursor: pointer; }
+.tl-toggle { align-items: center; }
+.tl-toggle .caret {
+  width: 7px; height: 7px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+  transform: rotate(-45deg); transition: transform .15s; margin-right: 2px;
+}
+.tl-picker.open .tl-toggle .caret { transform: rotate(45deg); }
 .tl-picker-actions { display: inline-flex; flex-wrap: wrap; gap: 12px; margin-left: auto; font-size: 12.5px; }
 .tl-legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
 .tl-legend span { display: inline-flex; align-items: center; gap: 6px; }
