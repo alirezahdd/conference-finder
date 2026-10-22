@@ -33,7 +33,7 @@ The site is plain static files, served by GitHub Pages from the `main` branch. E
 
 ## Conferences to update by hand
 
-These conferences are not in ccf-deadlines, so neither the button nor the weekly job can update them. When their calls for papers come out, update their entries in `data.js` by hand:
+These conferences are not in ccf-deadlines, so neither the button nor the weekly job can update them. On the timeline they carry an orange **!** before the name (hover it for details). When their calls for papers come out, update their entries in `data.js` by hand:
 
 | Area | Conferences |
 |---|---|

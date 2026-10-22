@@ -87,11 +87,15 @@
   let sync = store.get("cf-ccf-off", false) ? null : newer(store.get("cf-ccf", null), window.CCF_SNAPSHOT || null);
   let merged = null; // result of merging `sync` into data.js: { entries, changes, kept, added, missing }
   let ALL, AREAS;
+  // Conferences ccf-deadlines does not cover: their dates are only as current as data.js.
+  let MANUAL = new Set();
   function applySync() {
     merged = null;
     if (sync && UPD) {
       try { merged = UPD.merge(BASE, sync.data); } catch { sync = null; } // unreadable cache: fall back to data.js
     }
+    const coverage = (sync || window.CCF_SNAPSHOT || {}).data;
+    MANUAL = new Set(coverage && UPD ? UPD.missingFrom(coverage, [...new Set(BASE.map((c) => c.name))]) : []);
     ALL = withProjections(merged ? merged.entries : BASE);
     AREAS = [...new Set(ALL.flatMap((c) => c.areas))].sort();
   }
@@ -283,7 +287,7 @@
         <div class="tl-row ${isClosed(c) ? "dim" : ""} ${state.stars.has(c.id) ? "highlight" : ""} ${s ? `plan-${s.rej.cls === "missed" && s.wd && s.wd.cls !== "missed" ? "saved" : s.rej.cls}` : ""}">
           <div class="tl-label" title="${esc(c.fullName || "")}">${c.notification
             ? `<input type="checkbox" class="sub" data-plan="${esc(c.id)}" ${p && p.sel.id === c.id ? "checked" : ""} title="I submitted here: show what is left if rejected">`
-            : `<span class="sub"></span>`}<button class="star ${state.stars.has(c.id) ? "on" : ""}" data-star="${esc(c.id)}" title="Star: mark as a target">★</button>${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener" title="Call for papers">${esc(c.name)} ${String(c.year).slice(2)}</a>` : `${esc(c.name)} ${String(c.year).slice(2)}`}${c.cycle ? ` <small>${esc(c.cycle)}</small>` : ""}${c.status === "estimated" ? ` <small>(est.)</small>` : ""}${c.added ? ` <small class="upd" data-tip="${esc(`Added from ccf-deadlines. ${c.notes || ""}`)}">new</small>` : c.updated ? ` <small class="upd" data-tip="${esc(`Updated from ccf-deadlines: ${c.updated.join(", ")}`)}">updated</small>` : ""}</div>
+            : `<span class="sub"></span>`}<button class="star ${state.stars.has(c.id) ? "on" : ""}" data-star="${esc(c.id)}" title="Star: mark as a target">★</button>${MANUAL.has(c.name) ? `<span class="manual" data-tip="${esc(`${c.name} is not in ccf-deadlines, so its dates are never updated automatically. They are as of ${window.DATA_UPDATED ? fmt(window.DATA_UPDATED) : "the last edit of data.js"}; check the call for papers.`)}">!</span>` : ""}${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener" title="Call for papers">${esc(c.name)} ${String(c.year).slice(2)}</a>` : `${esc(c.name)} ${String(c.year).slice(2)}`}${c.cycle ? ` <small>${esc(c.cycle)}</small>` : ""}${c.status === "estimated" ? ` <small>(est.)</small>` : ""}${c.added ? ` <small class="upd" data-tip="${esc(`Added from ccf-deadlines. ${c.notes || ""}`)}">new</small>` : c.updated ? ` <small class="upd" data-tip="${esc(`Updated from ccf-deadlines: ${c.updated.join(", ")}`)}">updated</small>` : ""}</div>
           <div class="tl-track">${grid}${lock}${todayLine}${bar}${reb}
             ${mark("ab", c.abstract, `${label(c)} abstract: ${fmt(c.abstract)}${tzLabel(c)}${left(c.abstract)}`)}
             ${mark("dl", c.deadline, `${label(c)} paper deadline: ${fmt(c.deadline)}${tzLabel(c)}${left(c.deadline)}`)}
@@ -304,6 +308,7 @@
         <span><i class="sw" style="background:var(--review);transform:rotate(45deg);width:9px;height:9px"></i>Notification</span>
         <span><i class="sw" style="background:var(--conf);border-radius:50%;width:9px;height:9px"></i>Conference</span>
         <span><i class="sw" style="background:var(--bad);width:2px;height:12px"></i>Today</span>
+        ${items.some((c) => MANUAL.has(c.name)) ? `<span><span class="manual">!</span>Not in ccf-deadlines, never auto-updated: check the CFP</span>` : ""}
         ${p ? `<span><i class="sw" style="background:var(--lock);border:1px solid var(--accent)"></i>Your paper in review → decision</span>${p.W ? `<span><i class="sw" style="border-left:2px dashed var(--rebut);width:2px;height:12px;border-radius:0"></i>Withdraw (rebuttal day 2)</span>` : ""}` : `<span><input type="checkbox" disabled style="margin:0"> Tick where you submitted to see what is left if rejected</span>`}
       </div>
       ${planSummary(p, statuses)}

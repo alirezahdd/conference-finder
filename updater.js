@@ -220,7 +220,10 @@
     return ccf.filter((c) => names.some((n) => isConf(c, n)));
   };
 
-  const api = { SOURCE, SOURCE_PAGE, merge, subset, fetchDataset, confDates, when };
+  // Our conference names that ccf-deadlines has no record for, so nothing can update them.
+  const missingFrom = (ccf, names) => names.filter((n) => !ccf.some((c) => isConf(c, n)));
+
+  const api = { SOURCE, SOURCE_PAGE, merge, subset, missingFrom, fetchDataset, confDates, when };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.CFUpdater = api;
 })(typeof window !== "undefined" ? window : globalThis);
