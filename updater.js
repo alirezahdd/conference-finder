@@ -9,6 +9,10 @@
   const YAML_LIB = "https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js";
   // Our conference name -> ccf-deadlines title, where they differ.
   const TITLES = { ATC: "SIGOPS ATC", CGO: "IEEE/ACM CGO", ESOP: "ETAPS", TACAS: "ETAPS", "USENIX Sec": "USENIX Security" };
+  // ccf-deadlines category for titles it uses twice (FSE is also Fast Software Encryption, under SC).
+  const SUBS = { FSE: "SE" };
+  // Does ccf record c stand for our conference `name`?
+  const isConf = (c, name) => String(c.title).toLowerCase() === (TITLES[name] || name).toLowerCase() && (!SUBS[name] || c.sub === SUBS[name]);
   const MATCH_DAYS = 45; // a ccf cycle and one of ours are the same cycle if their deadlines are this close
 
   const DAY = 86400000;
@@ -58,10 +62,9 @@
 
   // Flatten ccf-deadlines into one record per submission cycle, keyed by our conference names.
   function cyclesFrom(ccf, names) {
-    const byTitle = new Map(ccf.map((c) => [String(c.title).toLowerCase(), c]));
     const out = new Map();
     for (const name of names) {
-      const conf = byTitle.get((TITLES[name] || name).toLowerCase());
+      const conf = ccf.find((c) => isConf(c, name));
       if (!conf) continue;
       const cycles = [];
       for (const ed of conf.confs || []) {
@@ -205,8 +208,7 @@
 
   // Only the records for our conferences, small enough to cache in the browser.
   const subset = (ccf, names) => {
-    const wanted = new Set(names.map((n) => (TITLES[n] || n).toLowerCase()));
-    return ccf.filter((c) => wanted.has(String(c.title).toLowerCase()));
+    return ccf.filter((c) => names.some((n) => isConf(c, n)));
   };
 
   const api = { SOURCE, SOURCE_PAGE, merge, subset, fetchDataset, confDates, when };
