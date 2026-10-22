@@ -42,7 +42,8 @@ These conferences are not in ccf-deadlines, so neither the button nor the weekly
 | Verification | SPIN |
 | Optimisation | CPAIOR |
 | Embedded & real-time | RTNS, RTCSA, ICCPS (HSCC+ICCPS), ECRTS, CASES |
-| Wireless & IoT | EWSN, DCOSS-IoT |
+| Security | NordSec |
+| Mobile, wireless & IoT | EWSN, DCOSS-IoT, HotMobile, IMWUT (UbiComp) |
 | Databases | DEBS |
 | Social computing | ASONAM, IC2S2 |
 | Green computing | e-Energy, IGSC |
