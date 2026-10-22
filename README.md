@@ -31,6 +31,8 @@ The result is saved in your browser only (rows show an `updated`/`new` tag); **U
 
 The site is plain static files, served by GitHub Pages from the `main` branch. Every Monday the **Update deadlines** GitHub Action (`.github/workflows/update-deadlines.yml`) runs `scripts/update-ccf.mjs`. The script downloads ccf-deadlines and, if anything changed, commits `data-ccf.js`, a snapshot the page merges on load with the same rules as the button. `data.js` itself is never edited by the bot. To run it by hand, open the Actions tab, choose **Update deadlines** and click **Run workflow**. The run summary lists what changed.
 
+When an edition has no website yet, set `url` to the conference's permanent homepage, as listed in `window.SERIES_HOMEPAGES` at the top of `data.js`. Projected next editions use that page automatically, and the link's hover text says it is the series homepage.
+
 ## Conferences to update by hand
 
 These conferences are not in ccf-deadlines, so neither the button nor the weekly job can update them. On the timeline they carry an orange **!** before the name (hover it for details). When their calls for papers come out, update their entries in `data.js` by hand:
@@ -69,7 +71,9 @@ All hand-curated data lives in `data.js`. Each entry is one submission cycle:
   earlyReject: null,                              // optional: first-round reject notice
   notification: "2027-..",
   confStart: "2027-..", confEnd: "2027-..", location: "...",
-  url: "https://...", status: "confirmed" | "partial" | "estimated", notes: "..."
+  url: "https://...",                             // homepage of this edition (clicking the name opens it)
+  cfp: "https://...",                             // optional: call-for-papers page
+  status: "confirmed" | "partial" | "estimated", notes: "..."
 }
 ```
 

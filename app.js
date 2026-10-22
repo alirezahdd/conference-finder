@@ -72,7 +72,9 @@
     for (const c of latest.values()) {
       if (dueAt(c, c.deadline) > Date.now()) continue;
       const n = c.biennial ? 2 : 1;
+      // The next edition has no site yet: link to the series homepage, not last year's page.
       const p = { ...c, id: `${c.id}-proj`, year: c.year ? c.year + n : null, status: "estimated", projected: true, updated: undefined, added: undefined,
+        url: (window.SERIES_HOMEPAGES || {})[c.name] || c.url,
         notes: `Projected from the ${c.year ?? "previous"} dates (+${n} yr). Check the official CFP once it is out.` };
       for (const k of ["abstract", "deadline", "rebuttalStart", "rebuttalEnd", "earlyReject", "notification", "confStart", "confEnd"]) p[k] = shift(c[k], n);
       projected.push(p);
@@ -287,7 +289,7 @@
         <div class="tl-row ${isClosed(c) ? "dim" : ""} ${state.stars.has(c.id) ? "highlight" : ""} ${s ? `plan-${s.rej.cls === "missed" && s.wd && s.wd.cls !== "missed" ? "saved" : s.rej.cls}` : ""}">
           <div class="tl-label" title="${esc(c.fullName || "")}">${c.notification
             ? `<input type="checkbox" class="sub" data-plan="${esc(c.id)}" ${p && p.sel.id === c.id ? "checked" : ""} title="I submitted here: show what is left if rejected">`
-            : `<span class="sub"></span>`}<button class="star ${state.stars.has(c.id) ? "on" : ""}" data-star="${esc(c.id)}" title="Star: mark as a target">★</button>${MANUAL.has(c.name) ? `<span class="manual" data-tip="${esc(`${c.name} is not in ccf-deadlines, so its dates are never updated automatically. They are as of ${window.DATA_UPDATED ? fmt(window.DATA_UPDATED) : "the last edit of data.js"}; check the call for papers.`)}">!</span>` : ""}${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener" title="Call for papers">${esc(c.name)} ${String(c.year).slice(2)}</a>` : `${esc(c.name)} ${String(c.year).slice(2)}`}${c.cycle ? ` <small>${esc(c.cycle)}</small>` : ""}${c.status === "estimated" ? ` <small>(est.)</small>` : ""}${c.added ? ` <small class="upd" data-tip="${esc(`Added from ccf-deadlines. ${c.notes || ""}`)}">new</small>` : c.updated ? ` <small class="upd" data-tip="${esc(`Updated from ccf-deadlines: ${c.updated.join(", ")}`)}">updated</small>` : ""}</div>
+            : `<span class="sub"></span>`}<button class="star ${state.stars.has(c.id) ? "on" : ""}" data-star="${esc(c.id)}" title="Star: mark as a target">★</button>${MANUAL.has(c.name) ? `<span class="manual" data-tip="${esc(`${c.name} is not in ccf-deadlines, so its dates are never updated automatically. They are as of ${window.DATA_UPDATED ? fmt(window.DATA_UPDATED) : "the last edit of data.js"}; check the call for papers.`)}">!</span>` : ""}${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener" title="${c.url === (window.SERIES_HOMEPAGES || {})[c.name] ? `Series homepage: no ${c.name} ${c.year} site yet` : `${c.name} ${c.year} homepage`}">${esc(c.name)} ${String(c.year).slice(2)}</a>` : `${esc(c.name)} ${String(c.year).slice(2)}`}${c.cycle ? ` <small>${esc(c.cycle)}</small>` : ""}${c.status === "estimated" ? ` <small>(est.)</small>` : ""}${c.added ? ` <small class="upd" data-tip="${esc(`Added from ccf-deadlines. ${c.notes || ""}`)}">new</small>` : c.updated ? ` <small class="upd" data-tip="${esc(`Updated from ccf-deadlines: ${c.updated.join(", ")}`)}">updated</small>` : ""}</div>
           <div class="tl-track">${grid}${lock}${todayLine}${bar}${reb}
             ${mark("ab", c.abstract, `${label(c)} abstract: ${fmt(c.abstract)}${tzLabel(c)}${left(c.abstract)}`)}
             ${mark("dl", c.deadline, `${label(c)} paper deadline: ${fmt(c.deadline)}${tzLabel(c)}${left(c.deadline)}`)}
