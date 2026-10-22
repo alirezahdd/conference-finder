@@ -8,9 +8,10 @@
   const SOURCE_PAGE = "https://ccfddl.com/";
   const YAML_LIB = "https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js";
   // Our conference name -> ccf-deadlines title, where they differ.
-  const TITLES = { ATC: "SIGOPS ATC", CGO: "IEEE/ACM CGO", ESOP: "ETAPS", TACAS: "ETAPS", "USENIX Sec": "USENIX Security" };
-  // ccf-deadlines category for titles it uses twice (FSE is also Fast Software Encryption, under SC).
-  const SUBS = { FSE: "SE" };
+  const TITLES = { ATC: "SIGOPS ATC", CGO: "IEEE/ACM CGO", ESOP: "ETAPS", TACAS: "ETAPS", "USENIX Sec": "USENIX Security", KDD: "SIGKDD", CSF: "CSFW" };
+  // ccf-deadlines category for titles it uses twice (FSE is also Fast Software Encryption, SEC also
+  // an IFIP security conference, both under SC).
+  const SUBS = { FSE: "SE", SEC: "DS" };
   // Does ccf record c stand for our conference `name`?
   const isConf = (c, name) => String(c.title).toLowerCase() === (TITLES[name] || name).toLowerCase() && (!SUBS[name] || c.sub === SUBS[name]);
   const MATCH_DAYS = 45; // a ccf cycle and one of ours are the same cycle if their deadlines are this close

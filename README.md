@@ -1,6 +1,6 @@
 # Conference Finder
 
-Deadline tracker for top conferences in computer architecture, systems, programming languages, formal verification, software engineering and testing, embedded/real-time systems, security and wireless/mobile networking.
+Deadline tracker for top conferences in computer architecture and systems, programming languages and logic, formal verification, software engineering and testing, embedded/real-time systems, security and privacy, optimisation and AI, data science and computational social science, wireless/mobile networking, and green/edge computing.
 No install, no server: **open `index.html` in a browser.**
 
 ## Using it
