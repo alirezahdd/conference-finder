@@ -8,7 +8,7 @@
   const SOURCE_PAGE = "https://ccfddl.com/";
   const YAML_LIB = "https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js";
   // Our conference name -> ccf-deadlines title, where they differ.
-  const TITLES = { ATC: "SIGOPS ATC", CGO: "IEEE/ACM CGO", ESOP: "ETAPS", TACAS: "ETAPS", "USENIX Sec": "USENIX Security", KDD: "SIGKDD", CSF: "CSFW" };
+  const TITLES = { ATC: "SIGOPS ATC", CGO: "IEEE/ACM CGO", ESOP: "ETAPS", TACAS: "ETAPS", FoSSaCS: "ETAPS", "USENIX Sec": "USENIX Security", KDD: "SIGKDD", CSF: "CSFW" };
   // ccf-deadlines category for titles it uses twice (FSE is also Fast Software Encryption, SEC also
   // an IFIP security conference, both under SC).
   const SUBS = { FSE: "SE", SEC: "DS" };
@@ -133,6 +133,8 @@
       // Same day but another time zone: report the times, not two identical dates.
       const zone = (time, off) => (off == null ? "AoE" : `${time || "23:59"} UTC${off >= 0 ? "+" : ""}${off}`);
       const sameDay = field === "deadline" && c[field] === k.date;
+      // ccf-deadlines uses AoE as its default when the zone is unknown: a specific time in data.js wins.
+      if (sameDay && k.utcOffset == null && c.utcOffset != null) return;
       const what = sameDay ? "deadline time" : field;
       const from = sameDay ? zone(c.time, c.utcOffset) : c[field];
       const to = sameDay ? zone(k.time, k.utcOffset) : k.date;

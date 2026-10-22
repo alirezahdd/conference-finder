@@ -23,13 +23,37 @@ The **Check for updates** button downloads the community-maintained [ccf-deadlin
 - Entries marked `confirmed` in `data.js` keep their dates; only a **later** paper/abstract deadline (an extension) is applied. Other disagreements are listed in the report as "kept" so you can check them.
 - `partial` and `estimated` entries take the ccf-deadlines dates; empty fields are filled in.
 - A cycle newer than anything in `data.js` (e.g. next year's CFP) is added. Its rebuttal start is unknown, so check the CFP.
-- CC and ISLPED are not in ccf-deadlines and are never updated this way.
+- Some conferences are not in ccf-deadlines and are never updated this way; see [Conferences to update by hand](#conferences-to-update-by-hand).
 
 The result is saved in your browser only (rows show an `updated`/`new` tag); **Undo: use data.js only** in the report discards it. The merge logic lives in `updater.js`.
 
 ## Hosting and the weekly update
 
 The site is plain static files, served by GitHub Pages from the `main` branch. Every Monday the **Update deadlines** GitHub Action (`.github/workflows/update-deadlines.yml`) runs `scripts/update-ccf.mjs`. The script downloads ccf-deadlines and, if anything changed, commits `data-ccf.js`, a snapshot the page merges on load with the same rules as the button. `data.js` itself is never edited by the bot. To run it by hand, open the Actions tab, choose **Update deadlines** and click **Run workflow**. The run summary lists what changed.
+
+## Conferences to update by hand
+
+These conferences are not in ccf-deadlines, so neither the button nor the weekly job can update them. When their calls for papers come out, update their entries in `data.js` by hand:
+
+| Area | Conferences |
+|---|---|
+| Architecture & hardware | CC, ISLPED |
+| Programming languages & logic | ITP, CPP |
+| Verification | SPIN |
+| Optimisation | CPAIOR |
+| Embedded & real-time | RTNS, RTCSA, ICCPS (HSCC+ICCPS), ECRTS, CASES |
+| Wireless & IoT | EWSN, DCOSS-IoT |
+| Databases | DEBS |
+| Social computing | ASONAM, IC2S2 |
+| Green computing | e-Energy, IGSC |
+| HCI | NordiCHI |
+
+The weekly job's run summary ends with a "Not in ccf-deadlines" line, so this list can be checked against it whenever conferences are added.
+
+Two conferences are deliberately not tracked:
+
+- **CSCW** now takes submissions on a rolling basis (PACM HCI) with no deadlines.
+- **MEMSYS** has ended as a conference series and is becoming a journal.
 
 ## Updating data
 
