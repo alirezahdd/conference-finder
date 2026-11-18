@@ -14,7 +14,9 @@
   const SUBS = { FSE: "SE", SEC: "DS" };
   // Does ccf record c stand for our conference `name`?
   const isConf = (c, name) => String(c.title).toLowerCase() === (TITLES[name] || name).toLowerCase() && (!SUBS[name] || c.sub === SUBS[name]);
-  const MATCH_DAYS = 45; // a ccf cycle and one of ours are the same cycle if their deadlines are this close
+  const MATCH_DAYS = 45;
+  // ccf-deadlines timeline comments that mark a secondary track rather than a research-paper cycle.
+  const SIDE_TRACK = /\b(industry|industrial|workshop|short|poster|demo|tool|artifact|doctoral|student|tutorial|journal-first)\b/i; // a ccf cycle and one of ours are the same cycle if their deadlines are this close
 
   const DAY = 86400000;
   const dayOf = (s) => (s ? Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10)) / DAY : null);
@@ -72,10 +74,11 @@
         const timeline = ed.timeline || [];
         const dates = confDates(ed.date);
         for (const t of timeline) {
+          if (SIDE_TRACK.test(t.comment || "")) continue; // data.js tracks main research tracks only
           const deadline = when(t.deadline, ed.timezone);
           if (!deadline) continue;
           cycles.push({
-            year: ed.year, multi: timeline.length > 1, comment: t.comment || "", link: ed.link || null, place: ed.place || null,
+            year: ed.year, multi: timeline.filter((x) => !SIDE_TRACK.test(x.comment || "")).length > 1, comment: t.comment || "", link: ed.link || null, place: ed.place || null,
             deadline, abstract: when(t.abstract_deadline, ed.timezone),
             rebuttalEnd: when(t.rebuttal_deadline, ed.timezone), notification: when(t.decision_deadline, ed.timezone),
             confStart: dates && dates[0], confEnd: dates && dates[1],
