@@ -83,7 +83,7 @@
   }
   // ---------- updates from ccf-deadlines (see updater.js) ----------
   const UPD = window.CFUpdater;
-  // { fetchedAt, data }: ccf-deadlines records for our conferences. The weekly GitHub Action commits a
+  // { fetchedAt, data }: ccf-deadlines records for our conferences. The daily GitHub Action commits a
   // snapshot (data-ccf.js); a viewer's own "Check for updates" result wins when it is newer.
   const newer = (a, b) => (!a ? b : !b ? a : a.fetchedAt >= b.fetchedAt ? a : b);
   let sync = store.get("cf-ccf-off", false) ? null : newer(store.get("cf-ccf", null), window.CCF_SNAPSHOT || null);

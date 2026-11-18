@@ -27,15 +27,15 @@ The **Check for updates** button downloads the community-maintained [ccf-deadlin
 
 The result is saved in your browser only (rows show an `updated`/`new` tag); **Undo: use data.js only** in the report discards it. The merge logic lives in `updater.js`.
 
-## Hosting and the weekly update
+## Hosting and the daily update
 
-The site is plain static files, served by GitHub Pages from the `main` branch. Every Monday the **Update deadlines** GitHub Action (`.github/workflows/update-deadlines.yml`) runs `scripts/update-ccf.mjs`. The script downloads ccf-deadlines and, if anything changed, commits `data-ccf.js`, a snapshot the page merges on load with the same rules as the button. `data.js` itself is never edited by the bot. To run it by hand, open the Actions tab, choose **Update deadlines** and click **Run workflow**. The run summary lists what changed.
+The site is plain static files, served by GitHub Pages from the `main` branch. Every day (05:17 UTC) the **Update deadlines** GitHub Action (`.github/workflows/update-deadlines.yml`) runs `scripts/update-ccf.mjs`. The script downloads ccf-deadlines and, if anything changed, commits `data-ccf.js`, a snapshot the page merges on load with the same rules as the button. `data.js` itself is never edited by the bot. To run it by hand, open the Actions tab, choose **Update deadlines** and click **Run workflow**. The run summary lists what changed.
 
 When an edition has no website yet, set `url` to the conference's permanent homepage, as listed in `window.SERIES_HOMEPAGES` at the top of `data.js`. Projected next editions use that page automatically, and the link's hover text says it is the series homepage.
 
 ## Conferences to update by hand
 
-These conferences are not in ccf-deadlines, so neither the button nor the weekly job can update them. On the timeline they carry an orange **!** before the name (hover it for details). When their calls for papers come out, update their entries in `data.js` by hand:
+These conferences are not in ccf-deadlines, so neither the button nor the daily job can update them. On the timeline they carry an orange **!** before the name (hover it for details). When their calls for papers come out, update their entries in `data.js` by hand:
 
 | Area | Conferences |
 |---|---|
@@ -51,7 +51,7 @@ These conferences are not in ccf-deadlines, so neither the button nor the weekly
 | Green computing | e-Energy, IGSC |
 | HCI | NordiCHI |
 
-The weekly job's run summary ends with a "Not in ccf-deadlines" line, so this list can be checked against it whenever conferences are added.
+The daily job's run summary ends with a "Not in ccf-deadlines" line, so this list can be checked against it whenever conferences are added.
 
 Two conferences are deliberately not tracked:
 
